@@ -1,8 +1,7 @@
-const crypto = require('node:crypto');
-
 const pool = require('../../utils/maria');
 
 exports.search = async (req, res) => {
+
     let conn;
     
     try {
