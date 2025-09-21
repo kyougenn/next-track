@@ -15,7 +15,6 @@ router.use(bodyParser.json());
 
 router.use(require('./middleware/rateLimit'));
 
-// get was changed to post to allow a json body to be within http 1.1 standards for get requests
 router.get("/api/v1/status", statusControllerV1.next);
 
 router.get("/api/v1/tools/search", toolsControllerV1.search);

@@ -27,9 +27,11 @@ exports.updateUser = async (user_id, field, value, ttl) => {
     const user_data = await client.hGetAll('users:' + user_id);
     client.expireAt('users:' + user_id, parseInt((+new Date)/1000) + ttl * 3600);
 
-    await client.del(field + ':' + user_data[field]);
-    await client.rPush(field + ':' + user_data[field], value);
-    client.expireAt(field + ':' + user_data[field], parseInt((+new Date)/1000) + ttl * 3600);
+    if (value.length > 0) {
+        await client.del(field + ':' + user_data[field]);
+        await client.rPush(field + ':' + user_data[field], value);
+        client.expireAt(field + ':' + user_data[field], parseInt((+new Date)/1000) + ttl * 3600);
+    }
 }
 
 exports.getUser = async (user_id) => {

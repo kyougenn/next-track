@@ -1,0 +1,81 @@
+USE nexttrack;
+
+CREATE TABLE tracks (
+    id VARCHAR(32) NOT NULL PRIMARY KEY,
+    name VARCHAR(256) NOT NULL,
+    image VARCHAR(64) NOT NULL,
+    preview VARCHAR(128),
+    duration INT NOT NULL,
+    explicit BOOL NOT NULL,
+    popularity INT NOT NULL,
+    danceability FLOAT NOT NULL,
+    energy FLOAT NOT NULL,
+    loudness FLOAT NOT NULL,
+    speechiness FLOAT NOT NULL,
+    acousticness FLOAT NOT NULL,
+    instrumentalness FLOAT NOT NULL,
+    liveness FLOAT NOT NULL,
+    valence FLOAT NOT NULL,
+    tempo FLOAT NOT NULL,
+    chord INT NOT NULL,
+    published VARCHAR(16) NOT NULL
+);
+
+LOAD DATA INFILE '/csv_files/tracks.csv'
+INTO TABLE tracks
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
+
+CREATE TABLE trackArtists (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    song VARCHAR(32) NOT NULL,
+    artist VARCHAR(32) NOT NULL
+);
+
+LOAD DATA INFILE '/csv_files/trackArtists.csv' INTO TABLE trackArtists
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(song, artist)
+SET id = NULL;
+
+CREATE TABLE trackAlbums (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    song VARCHAR(32) NOT NULL,
+    album VARCHAR(32) NOT NULL
+);
+
+LOAD DATA INFILE '/csv_files/trackAlbums.csv' INTO TABLE trackAlbums
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(song, album)
+SET id = NULL;
+
+CREATE TABLE artistNames (
+    id VARCHAR(32) NOT NULL PRIMARY KEY,
+    name VARCHAR(256) NOT NULL
+);
+
+LOAD DATA INFILE '/csv_files/artistNames.csv'
+INTO TABLE artistNames
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
+
+CREATE TABLE albumNames (
+    id VARCHAR(32) NOT NULL PRIMARY KEY,
+    name VARCHAR(256) NOT NULL
+);
+
+LOAD DATA INFILE '/csv_files/albumNames.csv'
+INTO TABLE albumNames
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
