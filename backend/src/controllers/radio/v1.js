@@ -79,8 +79,6 @@ exports.listen = async (req, res) => {
 
         const tracks = await conn.query(`${sql} ORDER BY RAND() LIMIT 1`, params);
 
-        //console.log(tracks)
-
         if (tracks[0] !== undefined) {
             const artists = await conn.query('SELECT * FROM trackArtists WHERE song = ?', [tracks[0].id]);
             
