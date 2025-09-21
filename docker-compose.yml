@@ -1,0 +1,50 @@
+services:
+    maria:
+        image: mariadb:10.6
+        restart: always
+        command: --local-infile=1
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MARIA_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MARIA_DATABASE}
+            MYSQL_USER: ${MARIA_USER}
+            MYSQL_PASSWORD: ${MARIA_PASSWORD}
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./docker/db_init:/docker-entrypoint-initdb.d
+            - ./docker/csv_data:/csv_files
+            - mariadb_data:/var/lib/mysql
+
+    redis:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
+    backend:
+        build: ./backend
+        restart: always
+        ports:
+            - "8080:8080"
+        environment:
+            REDIS: redis://default@redis:6379
+            MARIA_HOST: maria
+            MARIA_DATABASE: ${MARIA_DATABASE}
+            MARIA_USER: ${MARIA_USER}
+            MARIA_PASSWORD: ${MARIA_PASSWORD}
+            
+    frontend:
+        build: ./frontend
+        restart: always
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./frontend/src:/usr/src/app/src
+        environment:
+            REACT_APP_API: http://localhost:8080/api/v1
+
+volumes:
+    mariadb_data:
+    redis_data:
